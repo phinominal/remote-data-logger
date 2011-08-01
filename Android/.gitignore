@@ -1,0 +1,20 @@
+bin
+gen
+
+#built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated GUI files
+*R.java
+
+
+# eclipse .metadata ?
+
+.metadata

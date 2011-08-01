@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content">
+        
+      <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    <ImageView android:id="@+id/sensor_icon" android:src="@drawable/icon" android:layout_marginTop="4px" android:layout_marginRight="4px"
+        android:layout_marginLeft="4px" android:layout_width="80px" android:layout_height="80px">
+    </ImageView>
+   
+    <LinearLayout android:id="@+id/linearLayout1" android:orientation="vertical"
+ android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10px">
+        <TextView android:text="@+id/TextView01" android:textSize="26px" android:id="@+id/label" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+        <TextView android:text="TextView" android:layout_width="wrap_content" android:textSize="12px" android:id="@+id/textView1" android:layout_height="wrap_content"></TextView>
+    </LinearLayout>
+</LinearLayout>
+
+    <CheckBox android:id="@+id/check" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:layout_marginLeft="4px"
+        android:layout_marginRight="10px" android:layout_alignParentRight="true"
+        ></CheckBox>
+</RelativeLayout>

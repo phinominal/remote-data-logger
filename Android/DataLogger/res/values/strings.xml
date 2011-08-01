@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, SplashScreen!</string>
+    <string name="app_name">Data Logger</string>
+    <string name="empty_sensor_list">No Sensors Available</string>
+</resources>

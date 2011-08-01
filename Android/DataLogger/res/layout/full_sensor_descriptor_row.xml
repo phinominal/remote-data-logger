@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="vertical">
+
+
+   
+    <RelativeLayout android:id="@+id/linearLayout1" android:orientation="horizontal"
+ android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10px">
+ 
+    <Button android:layout_width="wrap_content" android:id="@+id/play_pause_button" android:layout_height="wrap_content" android:text="Button" android:visibility="gone" android:layout_alignParentRight="true"></Button>
+ 
+        <TextView android:text="@+id/sensor_name_textview" android:textSize="20px" android:id="@+id/sensor_name_textview" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+        
+    </RelativeLayout>
+    
+     <RelativeLayout android:id="@+id/linearLayout1" android:orientation="horizontal"
+ android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10px">
+    <ProgressBar android:id="@+id/mv_progress_bar" style="?android:attr/progressBarStyleHorizontal" android:layout_width="130px" android:layout_height="wrap_content"></ProgressBar>
+     
+    </RelativeLayout>
+    
+      <RelativeLayout android:id="@+id/linearLayout1" android:orientation="horizontal"
+ android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10px">
+     <TextView android:text="@+id/mv_textview" android:textSize="20px" android:id="@+id/mv_textview" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+   
+    <Button android:layout_width="wrap_content" android:id="@+id/more_info_button" android:layout_height="wrap_content" android:visibility="gone" android:text="Info" android:layout_alignParentRight="true"></Button> 
+    
+    </RelativeLayout>
+    
+</LinearLayout>
+
+ 

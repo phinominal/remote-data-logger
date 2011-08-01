@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:background="@drawable/gradient_background"
+  android:layout_width="fill_parent"
+  android:layout_height="wrap_content">
+  
+  <ImageView android:id="@+id/plus_icon" android:src="@drawable/icon" android:layout_marginTop="4px" android:layout_marginRight="4px"
+        android:layout_marginLeft="4px" android:layout_width="64px" android:layout_height="64px" >
+    </ImageView>
+    
+    <TextView android:textSize="26px" android:id="@+id/label" android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_marginTop="4px" android:layout_marginRight="4px"
+        android:layout_marginLeft="4px" android:text="Add a sensor"></TextView>
+</LinearLayout>
