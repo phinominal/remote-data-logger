@@ -179,7 +179,8 @@ public class DataLogger extends ListActivity {
       @Override
         public void onReceive(Context context, Intent intent)//this method receives broadcast messages. Be sure to modify AndroidManifest.xml file in order to enable message receiving
         {
-    	  	Log.d("OUTPUT", "BROADCAST RECEIVED");
+    	  	Log.d("OUTPUT", "BROADCAST RECEIVED  Sensors: " + intent.getIntExtra(LogCaptureService.SENSOR_1, -1) + ", " + intent.getIntExtra(LogCaptureService.SENSOR_2, -1) + ", " + intent.getIntExtra(LogCaptureService.SENSOR_3, -1) + "   TimeStamp:  " + intent.getIntExtra(LogCaptureService.TIMESTAMP, -1) + "   DateString:  " + intent.getStringExtra(LogCaptureService.DATE_STRING));
+    	  	
         }
     }
 
