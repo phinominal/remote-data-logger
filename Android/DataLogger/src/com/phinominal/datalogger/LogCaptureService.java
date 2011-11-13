@@ -84,6 +84,13 @@ public class LogCaptureService extends Service {
 		return mBinder;
 	}
 	
+	@Override
+	public boolean onUnbind(Intent arg0) {
+		mHandler.removeCallbacks(mUpdateTimeTask);
+		stopSelf();
+		return false;
+	}
+	
 	private void handleStart(Intent intent) {
 		Log.d("SERVICE", "ON SERVICE START");
 	}
