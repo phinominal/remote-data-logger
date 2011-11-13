@@ -85,9 +85,6 @@ public class ApplicationContext extends Application {
 		return selectedSensors;
 	}
 	
-	private SensorDescriptor get(String s) {
-		return new SensorDescriptor(s);
-	}
 	
 	
 
