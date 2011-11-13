@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Date;
 
 import android.app.Service;
 import android.content.Intent;
@@ -13,6 +12,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.phinominal.ftclient.ClientLogin;
+import com.phinominal.ftclient.FtClient;
 
 public class LogCaptureService extends Service {
 	
@@ -27,7 +29,12 @@ public class LogCaptureService extends Service {
 	public static String SENSOR_5 = "com.phinominal.datalogger.logcaptureservice.SENSOR_5";
 	public static String SENSOR_6 = "com.phinominal.datalogger.logcaptureservice.SENSOR_6";
 	
+	private long tableid = 0;
+	private FtClient ftclient = null;
+	private int logInterval = 5;
+	private int currentLogNum = 0;
 	
+	//private String [] insertBuffer = new String[logInterval];
 	
 	private int updateIntervalMillis = 1000;
 	
@@ -103,19 +110,74 @@ public class LogCaptureService extends Service {
 	   					 }
 	   					 
 	   					 i++;
-	   				 }	   				 
+	   				 }	 
+	   				 
+	   				 final int finalTimeStamp = timeStamp;
+	   				 final String finalTimeString = timeString; 
+	   				 final int sensorValue1 = sensorValues[0];
+	   				 final int sensorValue2 = sensorValues[1];
+	   				 final int sensorValue3 = sensorValues[2];
 	   				 
 	   				 sendBroadcast(intent);
-	   				  
-	   				 //Log.d("CaptureInput", line);
 	   				 
-	   				 
+	   				if (ftclient != null && currentLogNum == 0) {
+	   					Thread thread = new Thread()
+		   				 {
+		   				     @Override
+		   				     public void run() {
+		   				         try {
+		   				        	    				        	 
+		   				        	// Generate INSERT statement
+				    			        StringBuilder insert = new StringBuilder();
+				    			        insert.append("INSERT INTO ");
+				    			        insert.append(tableid);
+				    			        insert.append(" (Sensor1, Sensor2, Sensor3, TimeStamp, DateString) VALUES ");
+				    			        insert.append("(");
+				    			        insert.append(sensorValue1);
+				    			        insert.append(", ");
+				    			        insert.append(sensorValue2);
+				    			        insert.append(", ");
+				    			        insert.append(sensorValue3);
+				    			        insert.append(", ");
+				    			        insert.append(finalTimeStamp);
+				    			        insert.append(", '");
+				    			        insert.append(finalTimeString);
+				    			        insert.append("')");
+		
+				    			        // Save the data to Fusion Tables
+				    			        Log.d("Logging query", insert.toString());
+				    			        ftclient.query(insert.toString());
+		   				         } catch (Exception e) {
+		   				        	 Log.d("FT Posting Exception", e.toString());
+		   				         }
+		   				     }
+		   				 };
+		   				 currentLogNum++;
+		   				 thread.start();
+	   				} else if (currentLogNum == logInterval) {
+	   					currentLogNum = 0;
+	   				} else {
+	   					currentLogNum++;	
+	   				}
 	   			 }
 	   		 } 
 	   	 } catch (Exception e) {
 	   		 
 	   		 Log.d("Exception", e.toString());
 	   	 }
+	}
+	
+	public void makeFTConnection(long tableid, String username, String password) {
+		this.tableid = tableid;
+		try {
+			// Initialize FTClient
+			String token = ClientLogin.authorize(username, password);
+			ftclient = new FtClient(token);
+			
+		} catch (Exception e) {
+			Log.d("OUTPUT", "FT ClientLogin Failed  " + Long.toString(System.currentTimeMillis()));
+   		 	Log.d("Exception", e.toString());
+   	 }
 	}
 	
 	private String sensorStringForSensorNumber(int i) {

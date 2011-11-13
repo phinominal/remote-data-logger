@@ -83,6 +83,8 @@ public class DataLogger extends ListActivity {
 		
 		this.doBindService();
 		
+		// 2154839
+		
 		// TODO  Clearly needs a different timing mechanism then a countdown timer!!!!, or at least it needs to restart it upon finish!!!
 		new CountDownTimer(30000000, 1500) {
 
@@ -197,7 +199,8 @@ public class DataLogger extends ListActivity {
 			
 			mBoundService.startCapture();	
 			mBoundService.publicMethod();
-
+			
+			mBoundService.makeFTConnection(2154839, "phinominaltechnology", "Sk8ordie!");
 	    }
 
 	    public void onServiceDisconnected(ComponentName className) {
