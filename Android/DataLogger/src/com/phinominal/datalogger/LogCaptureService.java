@@ -1,5 +1,7 @@
 package com.phinominal.datalogger;
 
+import java.util.Date;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -9,6 +11,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class LogCaptureService extends Service {
+	
+	public static String CAPTURE_EVENT = "com.phinominal.datalogger.custom.intent.action.CAPTURE_EVENT";
+	
+	public static String TIMESTAMP = "com.phinominal.datalogger.logcaptureservice.TIMESTAMP"; 
 	
 	private int updateIntervalMillis = 1000;
 	
@@ -33,7 +39,12 @@ public class LogCaptureService extends Service {
 	}
 	
 	private void captureLast() {
-		Log.d("LOG", "Printing contents of last dir");
+		//Log.d("LOG", "Printing contents of last directory...");
+		
+		
+		Intent intent = new Intent(CAPTURE_EVENT);
+        intent.putExtra(TIMESTAMP, new Date().getTime());
+        sendBroadcast(intent);
 	}
 
     @Override

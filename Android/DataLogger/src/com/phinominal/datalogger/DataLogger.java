@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.app.ListActivity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -60,10 +62,10 @@ public class DataLogger extends ListActivity {
 
 		
 		
-		
-		
-		
-		
+		IntentFilter captureFilter;
+        captureFilter = new IntentFilter(LogCaptureService.CAPTURE_EVENT);
+        CaptureServiceReceiver captureReceiver = new CaptureServiceReceiver();
+        registerReceiver(captureReceiver, captureFilter);
 		
 		
 		/*
@@ -172,6 +174,14 @@ public class DataLogger extends ListActivity {
 
 	}
 	
+	public class CaptureServiceReceiver extends BroadcastReceiver
+    {
+      @Override
+        public void onReceive(Context context, Intent intent)//this method receives broadcast messages. Be sure to modify AndroidManifest.xml file in order to enable message receiving
+        {
+    	  	Log.d("OUTPUT", "BROADCAST RECEIVED");
+        }
+    }
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
