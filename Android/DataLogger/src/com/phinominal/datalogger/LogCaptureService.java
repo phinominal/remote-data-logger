@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 
 import android.app.Service;
 import android.content.Intent;
@@ -33,6 +34,11 @@ public class LogCaptureService extends Service {
 	private FtClient ftclient = null;
 	private int logInterval = 5;
 	private int currentLogNum = 0;
+	
+	private int bufferSize = 10;
+	
+	
+	private ArrayList <LogEvent> logBuffer = new ArrayList();
 	
 	//private String [] insertBuffer = new String[logInterval];
 	
@@ -112,59 +118,78 @@ public class LogCaptureService extends Service {
 	   					 i++;
 	   				 }	 
 	   				 
-	   				 final int finalTimeStamp = timeStamp;
-	   				 final String finalTimeString = timeString; 
-	   				 final int sensorValue1 = sensorValues[0];
-	   				 final int sensorValue2 = sensorValues[1];
-	   				 final int sensorValue3 = sensorValues[2];
+	   				 
+	   				 if (logBuffer.size() < bufferSize) {
+	   					 LogEvent logEvent = new LogEvent(sensorValues[0], sensorValues[1], sensorValues[2], timeStamp, timeString);
+	   					 
+	   					 logBuffer.add(logEvent);
+	   				 } else {
+	   					Log.d("LOG", "Publishing buffer");
+	   					publishBuffer();
+	   				 }
 	   				 
 	   				 sendBroadcast(intent);
 	   				 
-	   				if (ftclient != null && currentLogNum == 0) {
-	   					Thread thread = new Thread()
-		   				 {
-		   				     @Override
-		   				     public void run() {
-		   				         try {
-		   				        	    				        	 
-		   				        	// Generate INSERT statement
-				    			        StringBuilder insert = new StringBuilder();
-				    			        insert.append("INSERT INTO ");
-				    			        insert.append(tableid);
-				    			        insert.append(" (Sensor1, Sensor2, Sensor3, TimeStamp, DateString) VALUES ");
-				    			        insert.append("(");
-				    			        insert.append(sensorValue1);
-				    			        insert.append(", ");
-				    			        insert.append(sensorValue2);
-				    			        insert.append(", ");
-				    			        insert.append(sensorValue3);
-				    			        insert.append(", ");
-				    			        insert.append(finalTimeStamp);
-				    			        insert.append(", '");
-				    			        insert.append(finalTimeString);
-				    			        insert.append("')");
-		
-				    			        // Save the data to Fusion Tables
-				    			        Log.d("Logging query", insert.toString());
-				    			        ftclient.query(insert.toString());
-		   				         } catch (Exception e) {
-		   				        	 Log.d("FT Posting Exception", e.toString());
-		   				         }
-		   				     }
-		   				 };
-		   				 currentLogNum++;
-		   				 thread.start();
-	   				} else if (currentLogNum == logInterval) {
-	   					currentLogNum = 0;
-	   				} else {
-	   					currentLogNum++;	
-	   				}
+	   				
 	   			 }
 	   		 } 
 	   	 } catch (Exception e) {
 	   		 
 	   		 Log.d("Exception", e.toString());
 	   	 }
+	}
+	
+	private void publishBuffer() {
+		
+		Thread thread = new Thread()
+			 {
+			     @Override
+			     public void run() {
+			         try {
+			        	 
+			        	 
+			        	StringBuilder masterInsert = new StringBuilder();
+			        	
+			     		
+					
+						for (int i = 0; i < logBuffer.size(); i++) {
+							
+							LogEvent logEvent = logBuffer.get(i);
+							
+							
+							StringBuilder insert = new StringBuilder();
+					        insert.append("INSERT INTO ");
+					        insert.append(tableid);
+					        insert.append(" (Sensor1, Sensor2, Sensor3, TimeStamp, DateString) VALUES ");
+					        
+							insert.append("(");
+						        insert.append(logEvent.sensor1);
+						        insert.append(", ");
+						        insert.append(logEvent.sensor2);
+						        insert.append(", ");
+						        insert.append(logEvent.sensor3);
+						        insert.append(", ");
+						        insert.append(logEvent.timeStamp);
+						        insert.append(", '");
+						        insert.append(logEvent.dateString);
+						        insert.append("'); ");
+						     
+						     masterInsert.append(insert);
+						}
+	
+						logBuffer.clear();
+						
+	   			        // Save the data to Fusion Tables
+	   			        Log.d("Logging query", masterInsert.toString());
+	   			        ftclient.query(masterInsert.toString());
+			         } catch (Exception e) {
+			        	 Log.d("FT Posting Exception", e.toString());
+			         }
+			     }
+			     
+			 };
+
+			 thread.start();
 	}
 	
 	public void makeFTConnection(long tableid, String username, String password) {
