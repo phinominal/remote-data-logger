@@ -32,15 +32,6 @@ public class DataLogger extends ListActivity {
 	private LogCaptureService mBoundService;
 	private boolean mIsBound = false;
 	
-	// **** TEMP Fusion Tables vars (these should be in a separate class...)
-	
-	private FtClient ftclient;
-	private long tableid = 2147942; //123456;
-	private String username = "phinominaltechnology";
-	private String password = "Sk8ordie!";
-	
-	// *********************************************************************
-	
 	
 	/** Called when the activity is first created. */
 	public void onCreate(Bundle icicle) {
@@ -155,9 +146,6 @@ public class DataLogger extends ListActivity {
 	    super.onDestroy();
 	    doUnbindService();
 	}
-	
-	
-	
 	
 	
 	
