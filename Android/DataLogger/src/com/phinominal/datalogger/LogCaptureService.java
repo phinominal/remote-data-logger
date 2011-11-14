@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -19,34 +20,17 @@ import com.phinominal.ftclient.FtClient;
 
 public class LogCaptureService extends Service {
 	
-	public static String CAPTURE_EVENT = "com.phinominal.datalogger.custom.intent.action.CAPTURE_EVENT";
-	
-	public static String TIMESTAMP = "com.phinominal.datalogger.logcaptureservice.TIMESTAMP";
-	public static String DATE_STRING = "com.phinominal.datalogger.logcaptureservice.DATE_STRING";
-	public static String SENSOR_1 = "com.phinominal.datalogger.logcaptureservice.SENSOR_1";
-	public static String SENSOR_2 = "com.phinominal.datalogger.logcaptureservice.SENSOR_2";
-	public static String SENSOR_3 = "com.phinominal.datalogger.logcaptureservice.SENSOR_3";
-	public static String SENSOR_4 = "com.phinominal.datalogger.logcaptureservice.SENSOR_4";
-	public static String SENSOR_5 = "com.phinominal.datalogger.logcaptureservice.SENSOR_5";
-	public static String SENSOR_6 = "com.phinominal.datalogger.logcaptureservice.SENSOR_6";
-	
 	private long tableid = 0;
 	private FtClient ftclient = null;
-	private int logInterval = 5;
-	private int currentLogNum = 0;
 	
 	private int bufferSize = 10;
+	private ArrayList <LogEvent> logBuffer = new ArrayList <LogEvent>();
 	
-	
-	private ArrayList <LogEvent> logBuffer = new ArrayList();
-	
-	//private String [] insertBuffer = new String[logInterval];
 	
 	private int updateIntervalMillis = 1000;
 	
 	
-	private Handler mHandler = new Handler();
-   
+	private Handler mHandler = new Handler();   
 	private Runnable mUpdateTimeTask = new Runnable() {
  	   public void run() {
  		   captureLast();
@@ -58,10 +42,6 @@ public class LogCaptureService extends Service {
 	public void startCapture() {
 		mHandler.removeCallbacks(mUpdateTimeTask);
         mHandler.post(mUpdateTimeTask);
-	}
-	
-	public void publicMethod() {
-		Log.d("LOG", "Public method called!!!!");
 	}
 	
 	private void captureLast() {
@@ -78,58 +58,26 @@ public class LogCaptureService extends Service {
 	   			 
 	   			 
 	   			 if (line != null) {
-	   				 String [] components = line.split(",");
 	   				 
-	   				 int [] sensorValues = new int[6];
-	   				 int timeStamp = -1;
-	   				 String timeString = "";
-	   				 int sensorCount = 0;
-	   				 int timeCount = 0;
-	   				 int i = 0;
-	   				 boolean parsingSensors = false;
-	   				 boolean parsingTime = false;
 	   				 
-	   				Intent intent = new Intent(CAPTURE_EVENT);
-	   				
+	   				 LogEvent logEvent = getLogEventFromCaptureLine(line);
 	   				 
-	   				 while (i < components.length) {
-	   					 String currComponent = components[i].trim();
+	   				 if (logEvent != null) {
 	   					 
-	   					 if (currComponent.equalsIgnoreCase("S")) {
-	   						 parsingSensors = true;
-	   					 } else if (currComponent.equalsIgnoreCase("T")) {
-	   						 parsingSensors = false;
-	   						 parsingTime = true;
-	   					 } else if (parsingSensors) {
-	   						 sensorValues[sensorCount] = Integer.parseInt(currComponent);
-	   						 intent.putExtra(sensorStringForSensorNumber(sensorCount), sensorValues[sensorCount]);
-	   						 sensorCount++;
-	   					 } else if (parsingTime) {
-	   						 if (timeCount == 0) {
-	   							 timeStamp = Integer.parseInt(currComponent);
-	   							intent.putExtra(TIMESTAMP, timeStamp);
-	   							 timeCount++;
-	   						 } else {
-	   							 intent.putExtra(DATE_STRING, currComponent);
-	   							 timeString = currComponent;
-	   						 }
-	   					 }
 	   					 
-	   					 i++;
-	   				 }	 
-	   				 
-	   				 
-	   				 if (logBuffer.size() < bufferSize) {
-	   					 LogEvent logEvent = new LogEvent(sensorValues[0], sensorValues[1], sensorValues[2], timeStamp, timeString);
-	   					 
-	   					 logBuffer.add(logEvent);
-	   				 } else {
-	   					Log.d("LOG", "Publishing buffer");
-	   					publishBuffer();
+	   					Intent intent = new Intent(Resources.getSystem().getString(R.string.CAPTURE_EVENT));
+	   					logEvent.addValuesToIntent(intent);
+	   					
+	   					sendBroadcast(intent);
+	   					
+	   					logBuffer.add(logEvent);
+	   					
+	   					if (logBuffer.size() >= bufferSize) {
+	   						Log.d("LOG", "Publishing buffer");
+	   						publishBuffer();
+	   					}
+
 	   				 }
-	   				 
-	   				 sendBroadcast(intent);
-	   				 
 	   				
 	   			 }
 	   		 } 
@@ -139,6 +87,49 @@ public class LogCaptureService extends Service {
 	   	 }
 	}
 	
+	
+	private LogEvent getLogEventFromCaptureLine(String line) {
+		
+		String [] components = line.split(",");
+			 
+			 int [] sensorValues = new int[6];
+			 int timeStamp = -1;
+			 String timeString = "";
+			 int sensorCount = 0;
+			 int timeCount = 0;
+			 int i = 0;
+			 boolean parsingSensors = false;
+			 boolean parsingTime = false;
+			 
+			 while (i < components.length) {
+				 String currComponent = components[i].trim();
+				 
+				 if (currComponent.equalsIgnoreCase("S")) {
+					 parsingSensors = true;
+				 } else if (currComponent.equalsIgnoreCase("T")) {
+					 parsingSensors = false;
+					 parsingTime = true;
+				 } else if (parsingSensors) {
+					 sensorValues[sensorCount] = Integer.parseInt(currComponent);
+					 
+					 sensorCount++;
+				 } else if (parsingTime) {
+					 if (timeCount == 0) {
+						 timeStamp = Integer.parseInt(currComponent);
+						 timeCount++;
+					 } else {
+						 timeString = currComponent;
+					 }
+				 }
+				 
+				 i++;
+			 }	 
+			 
+			 LogEvent logEvent = new LogEvent(sensorValues[0], sensorValues[1], sensorValues[2], timeStamp, timeString);
+			 return logEvent;
+	}
+	
+	
 	private void publishBuffer() {
 		
 		Thread thread = new Thread()
@@ -146,12 +137,9 @@ public class LogCaptureService extends Service {
 			     @Override
 			     public void run() {
 			         try {
-			        	 
-			        	 
-			        	StringBuilder masterInsert = new StringBuilder();
-			        	
-			     		
-					
+			        	 		        	 
+			        	StringBuilder batchInsert = new StringBuilder();
+			        					
 						for (int i = 0; i < logBuffer.size(); i++) {
 							
 							LogEvent logEvent = logBuffer.get(i);
@@ -174,21 +162,20 @@ public class LogCaptureService extends Service {
 						        insert.append(logEvent.dateString);
 						        insert.append("'); ");
 						     
-						     masterInsert.append(insert);
+						     batchInsert.append(insert);
 						}
 	
 						logBuffer.clear();
 						
 	   			        // Save the data to Fusion Tables
-	   			        Log.d("Logging query", masterInsert.toString());
-	   			        ftclient.query(masterInsert.toString());
+	   			        Log.d("Logging query", batchInsert.toString());
+	   			        ftclient.query(batchInsert.toString());
 			         } catch (Exception e) {
 			        	 Log.d("FT Posting Exception", e.toString());
 			         }
-			     }
-			     
+			     } 
 			 };
-
+			 
 			 thread.start();
 	}
 	
@@ -205,32 +192,6 @@ public class LogCaptureService extends Service {
    	 }
 	}
 	
-	private String sensorStringForSensorNumber(int i) {
-		String sensorString = "";
-		switch (i) {
-			case 0:
-				sensorString = SENSOR_1;
-				break;
-			case 1:
-				sensorString = SENSOR_2;
-				break;
-			case 2:
-				sensorString = SENSOR_3;
-				break;
-			case 3:
-				sensorString = SENSOR_4;
-				break;
-			case 4:
-				sensorString = SENSOR_5;
-				break;
-			case 5:
-				sensorString = SENSOR_6;
-				break;
-			default:
-					
-		}
-		return sensorString;
-	}
 
     @Override
     public void onCreate() {
@@ -247,7 +208,7 @@ public class LogCaptureService extends Service {
     public void onDestroy() {
         
         // Tell the user we stopped.
-        Toast.makeText(this, "LogCaptureService started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "LogCaptureService ended", Toast.LENGTH_SHORT).show();
     }
 
     

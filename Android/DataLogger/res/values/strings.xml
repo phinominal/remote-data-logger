@@ -2,5 +2,14 @@
 <resources>
     <string name="hello">Hello World, SplashScreen!</string>
     <string name="app_name">Data Logger</string>
-    <string name="empty_sensor_list">No Sensors Available</string>
+    <string name="empty_sensor_list">No Sensors Available</string>   
+    <string name="TIMESTAMP">com.phinominal.datalogger.TIMESTAMP</string>
+    <string name="DATE_STRING">com.phinominal.datalogger.DATESTRING</string>
+    <string name="SENSOR_1">com.phinominal.datalogger.SENSOR_1</string>
+    <string name="SENSOR_2">com.phinominal.datalogger.SENSOR_2</string>
+    <string name="SENSOR_3">com.phinominal.datalogger.SENSOR_3</string>
+    <string name="SENSOR_4">com.phinominal.datalogger.SENSOR_4</string>
+    <string name="SENSOR_5">com.phinominal.datalogger.SENSOR_5</string>
+    <string name="SENSOR_6">com.phinominal.datalogger.SENSOR_6</string>
+    <string name="CAPTURE_EVENT">com.phinominal.datalogger.custom.intent.action.CAPTURE_EVENT</string>
 </resources>

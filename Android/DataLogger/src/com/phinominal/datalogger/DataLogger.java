@@ -60,120 +60,15 @@ public class DataLogger extends ListActivity {
 		editText.setWidth(200);
 		getListView().addFooterView(editText);
 
-		
-		
+		// Register to receive capture broadcast events
 		IntentFilter captureFilter;
-        captureFilter = new IntentFilter(LogCaptureService.CAPTURE_EVENT);
+        captureFilter = new IntentFilter(this.getString(R.string.CAPTURE_EVENT));
         CaptureServiceReceiver captureReceiver = new CaptureServiceReceiver();
         registerReceiver(captureReceiver, captureFilter);
 		
-		
-		/*
-		try {
-			// Initialize FTClient
-			String token = ClientLogin.authorize(username, password);
-			ftclient = new FtClient(token);
-		} catch (Exception e) {
-			editText.setText("FT ClientLogin Failed  " + Long.toString(System.currentTimeMillis()));
-			Log.d("OUTPUT", "FT ClientLogin Failed  " + Long.toString(System.currentTimeMillis()));
-   		 	Log.d("Exception", e.toString());
-   	 }
-   	 */
-		
-		
+		// kick off LogCaptureService if it's not already running and bind to it
 		this.doBindService();
 		
-		// 2154839
-		
-		// TODO  Clearly needs a different timing mechanism then a countdown timer!!!!, or at least it needs to restart it upon finish!!!
-		new CountDownTimer(30000000, 1500) {
-
-		     public void onTick(long millisUntilFinished) {
-		    	 
-		    	 Log.d("LOG", "Printing contents of last dir");
-		    	 try {
-		    		 InputStream inStream = new FileInputStream("/data/local/PB_ADC_C"); 
-		    		 
-		    		 if (inStream != null) {
-		    			 InputStreamReader inputreader = new InputStreamReader(inStream);
-		    			 BufferedReader buffreader = new BufferedReader(inputreader);
-		    			 
-		    			 String line = buffreader.readLine();
-		    			 
-		    			 if (line != null) {
-		    				 String [] components = line.split(" ");
-		    				 
-		    				 editText.setText(line + "   " +  Long.toString(System.currentTimeMillis()));
-		    				 /*
-		    				 Thread thread = new Thread()
-		    				 {
-		    				     @Override
-		    				     public void run() {
-		    				         try {
-		    				        	 
-		    				        	 
-		    				        	// Generate INSERT statement
-		 		    			        StringBuilder insert = new StringBuilder();
-		 		    			        insert.append("INSERT INTO ");
-		 		    			        insert.append(tableid);
-		 		    			        insert.append(" (Severity, Location, Address, Timestamp) VALUES ");
-		 		    			        insert.append("(");
-		 		    			        insert.append(new Date().getTime());
-		 		    			        insert.append(", '");
-		 		    			        insert.append("String Location");
-		 		    			        insert.append("', '");
-		 		    			        insert.append("Address description");
-		 		    			        insert.append("', ");
-		 		    			        insert.append(new Date().getTime());
-		 		    			        insert.append(")");
-
-		 		    			        // Save the data to Fusion Tables
-		 		    			        ftclient.query(insert.toString());
-		    				         } catch (Exception e) {
-		    				        	 editText.setText("FusionTables insertion failed  " + Long.toString(System.currentTimeMillis()));
-				    		    		 Log.d("Exception", e.toString());
-		    				         }
-		    				     }
-		    				 };
-		    				 
-		    				 thread.start();
-		    				   */ 				 
-		    				 /*
-		    				 ArrayList <SensorDescriptor> list = getList();
-		    				 
-		    				 for (int i = 0; i < list.size(); i++) {
-		    					 
-		    					 
-		    					 SensorDescriptor descriptor = list.get(i);
-		    					 Float currFloat = Float.parseFloat(components[i]);
-		    					 
-		    					 descriptor.setCurrMV(currFloat.floatValue());
-		    					 
-		    				 }
-		    				 
-		    				 
-		    				 refreshList();
-		    				 
-		    				 */
-		    				 
-		    			 } 
-		    			/* If we were reading the full file instead...
-		    			 while ((line = buffreader.readLine()) != null) {
-		    				 Log.d("LOG", line);
-		    			 }
-		    			 */
-		    		 } 
-		    	 } catch (Exception e) {
-		    		 editText.setText("No file present at ADC_LAST  " + Long.toString(System.currentTimeMillis()));
-		    		 Log.d("Exception", e.toString());
-		    	 }
-		     }
-
-		     public void onFinish() {
-		         //mTextField.setText("done!");
-		     }
-		  };/*.start();*/
-
 	}
 	
 	public class CaptureServiceReceiver extends BroadcastReceiver
@@ -181,7 +76,33 @@ public class DataLogger extends ListActivity {
       @Override
         public void onReceive(Context context, Intent intent)//this method receives broadcast messages. Be sure to modify AndroidManifest.xml file in order to enable message receiving
         {
-    	  	Log.d("OUTPUT", "BROADCAST RECEIVED  Sensors: " + intent.getIntExtra(LogCaptureService.SENSOR_1, -1) + ", " + intent.getIntExtra(LogCaptureService.SENSOR_2, -1) + ", " + intent.getIntExtra(LogCaptureService.SENSOR_3, -1) + "   TimeStamp:  " + intent.getIntExtra(LogCaptureService.TIMESTAMP, -1) + "   DateString:  " + intent.getStringExtra(LogCaptureService.DATE_STRING));
+    	  	Log.d("OUTPUT", "BROADCAST RECEIVED  Sensors: " + intent.getIntExtra(getString(R.string.SENSOR_1), -1) + ", " + intent.getIntExtra(getString(R.string.SENSOR_2), -1) + ", " + intent.getIntExtra(getString(R.string.SENSOR_3), -1) + "   TimeStamp:  " + intent.getIntExtra(getString(R.string.TIMESTAMP), -1) + "   DateString:  " + intent.getStringExtra(getString(R.string.DATE_STRING)));
+    	  	
+    	  	
+    	  	// Here is the former code that updated the UI.  Will have to modify slightly to use data from intent...
+    	  	
+    	  	 /*
+    	  	  * 
+    	  	  
+    	  	 editText.setText(line + "   " +  Long.toString(System.currentTimeMillis()));
+    	  	  
+			 ArrayList <SensorDescriptor> list = getList();
+			 
+			 for (int i = 0; i < list.size(); i++) {
+				 
+				 
+				 SensorDescriptor descriptor = list.get(i);
+				 Float currFloat = Float.parseFloat(components[i]);
+				 
+				 descriptor.setCurrMV(currFloat.floatValue());
+				 
+			 }
+			 
+			 
+			 refreshList();
+			 */
+    	  	
+    	  	
     	  	
         }
     }
@@ -198,7 +119,6 @@ public class DataLogger extends ListActivity {
 	        
 			
 			mBoundService.startCapture();	
-			mBoundService.publicMethod();
 			
 			mBoundService.makeFTConnection(2154839, "phinominaltechnology", "Sk8ordie!");
 	    }
