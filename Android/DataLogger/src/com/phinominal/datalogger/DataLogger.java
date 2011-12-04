@@ -1,9 +1,5 @@
 package com.phinominal.datalogger;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import android.app.ListActivity;
@@ -16,16 +12,25 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.phinominal.datalogger.SensorArrayAdapter.FullViewHolder;
 
 public class DataLogger extends ListActivity {
 
 	public EditText editText;
+	
+	private EditText lastRecordedValueEditText;
+	private EditText lastCloudSyncEditText;
+	private Button investigateCloudSyncErrorButton;
+	private Button toggleCloudSyncing;
 	
 	private LogCaptureService mBoundService;
 	private boolean mIsBound = false;
@@ -38,6 +43,14 @@ public class DataLogger extends ListActivity {
 		
 		ApplicationContext appContext = ((ApplicationContext)getApplicationContext());
 		
+		
+		ListView lv = getListView();
+		//LayoutInflater inflater = (LayoutInflater)   this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = getLayoutInflater();
+		ViewGroup header = (ViewGroup) inflater.inflate(R.layout.data_logger_header, lv, false);
+		lv.addHeaderView(header, null, false);
+		//lv.addFooterView(header);
+		
 		ArrayAdapter<SensorDescriptor> adapter = new SensorArrayAdapter(this,
 				appContext.getSelectedSensors(), true);
 		setListAdapter(adapter);
@@ -47,7 +60,7 @@ public class DataLogger extends ListActivity {
 		editText = new EditText(this);
 		editText.setHeight(80);
 		editText.setWidth(200);
-		getListView().addFooterView(editText);
+		//getListView().addFooterView(editText);
 
 		// Register to receive capture broadcast events
 		IntentFilter captureFilter;
