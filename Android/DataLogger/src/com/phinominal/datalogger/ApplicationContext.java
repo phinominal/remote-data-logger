@@ -41,13 +41,14 @@ public class ApplicationContext extends Application {
 		}
 		
 		// currently creating the sensor array every time...
-		if (true /*sensors == null*/) {
+		if (sensors == null) {
 			sensors = new ArrayList<SensorDescriptor>();
-			sensors.add(new SensorDescriptor("Soil Humidity", 7000, 50000, "Dry", "Wet", 0));
-			sensors.add(new SensorDescriptor("Temperature", 0, 232, "Dark", "Light", 1));
-			sensors.add(new SensorDescriptor("Photon Density", 0, 4000, "Cold", "Hot", 2));
-			sensors.add(new SensorDescriptor("Infrared", 0, 4000, "Low", "High", 3));
-			sensors.add(new SensorDescriptor("Photo Diode", 0, 4000, "Close", "Far", 5));
+			sensors.add(new SensorDescriptor("Sensor 1", 7000, 50000, "", "", 0, true));
+			sensors.add(new SensorDescriptor("Sensor 2", 0, 232, "", "", 1, true));
+			sensors.add(new SensorDescriptor("Sensor 3", 0, 4000, "", "", 2, true));
+			sensors.add(new SensorDescriptor("Sensor 4", 0, 4000, "", "", 3, true));
+			sensors.add(new SensorDescriptor("Sensor 5", 0, 4000, "", "", 4, true));
+			sensors.add(new SensorDescriptor("Sensor 6", 0, 4000, "", "", 5, true));
 		}
 	}
 	

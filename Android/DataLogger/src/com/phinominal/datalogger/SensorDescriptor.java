@@ -15,13 +15,14 @@ public class SensorDescriptor implements Serializable {
 	private String rangeMaxLabel;
 	private int tag;
 	
-	public SensorDescriptor(String name, int rangeMin, int rangeMax, String rangeMinLabel, String rangeMaxLabel, int tag) {
+	public SensorDescriptor(String name, int rangeMin, int rangeMax, String rangeMinLabel, String rangeMaxLabel, int tag, boolean selected) {
 		this.name = name;
 		this.rangeMin = rangeMin;
 		this.rangeMax = rangeMax;
 		this.rangeMinLabel = rangeMinLabel;
 		this.rangeMaxLabel = rangeMaxLabel;
 		this.tag = tag;
+		this.selected = selected;
 	}
 	
 	public float getMappedMV() {

@@ -14,7 +14,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.Menu;
@@ -23,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 
 import com.phinominal.datalogger.SensorArrayAdapter.FullViewHolder;
-import com.phinominal.ftclient.FtClient;
 
 public class DataLogger extends ListActivity {
 
