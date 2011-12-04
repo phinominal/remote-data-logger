@@ -22,6 +22,7 @@ public class LogCaptureService extends Service {
 	
 	private long tableid = 0;
 	private FtClient ftclient = null;
+	private String capturePath = "/data/local/PB_ADC_C";
 	
 	private int bufferSize = 10;
 	private ArrayList <LogEvent> logBuffer = new ArrayList <LogEvent>();
@@ -39,7 +40,10 @@ public class LogCaptureService extends Service {
  	};
  
 	
-	public void startCapture() {
+	public void startCapture(String capturePath) {
+		if (capturePath != null) {
+			this.capturePath = capturePath;
+		}
 		mHandler.removeCallbacks(mUpdateTimeTask);
         mHandler.post(mUpdateTimeTask);
 	}
@@ -48,7 +52,7 @@ public class LogCaptureService extends Service {
 		//Log.d("LOG", "Printing contents of last directory...");
 		
 		try {
-	   		 InputStream inStream = new FileInputStream("/data/local/PB_ADC_C"); 
+	   		 InputStream inStream = new FileInputStream(this.capturePath); 
 	   		 
 	   		 if (inStream != null) {
 	   			 InputStreamReader inputreader = new InputStreamReader(inStream);
@@ -76,14 +80,12 @@ public class LogCaptureService extends Service {
 	   						Log.d("LOG", "Publishing buffer");
 	   						publishBuffer();
 	   					}
-
 	   				 }
-	   				
 	   			 }
 	   		 } 
 	   	 } catch (Exception e) {
 	   		 
-	   		 Log.d("Exception", e.toString());
+	   		 Log.d("Exception....", e.toString());
 	   	 }
 	}
 	
@@ -131,6 +133,9 @@ public class LogCaptureService extends Service {
 	
 	
 	private void publishBuffer() {
+		if (ftclient == null) {
+			return;  // short-circuiting because ftclient is null
+		}
 		
 		Thread thread = new Thread()
 			 {

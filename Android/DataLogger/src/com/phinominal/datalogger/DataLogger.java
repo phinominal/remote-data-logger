@@ -107,7 +107,7 @@ public class DataLogger extends ListActivity {
 	        mBoundService = ((LogCaptureService.LogCaptureBinder)service).getService();
 	        
 			
-			mBoundService.startCapture();	
+			mBoundService.startCapture("/data/local/PB_ADC_C");	
 			
 			mBoundService.makeFTConnection(2154839, "phinominaltechnology", "Sk8ordie!");
 	    }
