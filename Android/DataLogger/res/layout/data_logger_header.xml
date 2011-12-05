@@ -25,18 +25,46 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/last_update_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="---"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="150dp"
+            android:layout_height="72dp"
             android:layout_weight="0.14"
-            android:text="Start Cloud Sync" />
+            android:gravity="center_horizontal" >
+
+            <Button
+                android:id="@+id/toggle_cloud_sync_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_weight="0.14"
+                android:text="Start Cloud Sync" />
+
+            <TextView
+                android:id="@+id/cloud_sync_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignRight="@+id/toggle_cloud_sync_button"
+                android:layout_toRightOf="@+id/progressBar1"
+                android:text="Small Text"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ProgressBar
+                android:id="@+id/cloud_sync_progress_bar"
+                style="?android:attr/progressBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/toggle_cloud_sync_button"
+                android:layout_alignParentBottom="true" />
+        </RelativeLayout>
 
     </LinearLayout>

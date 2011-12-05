@@ -20,6 +20,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.phinominal.datalogger.SensorArrayAdapter.FullViewHolder;
 
@@ -27,10 +29,10 @@ public class DataLogger extends ListActivity {
 
 	public EditText editText;
 	
-	private EditText lastRecordedValueEditText;
-	private EditText lastCloudSyncEditText;
-	private Button investigateCloudSyncErrorButton;
-	private Button toggleCloudSyncing;
+	private TextView lastUpdateValueTextView;
+	private TextView cloudSyncStatusTextView;
+	private Button toggleCloudSyncingButton;
+	private ProgressBar cloudSyncProgressBar;
 	
 	private LogCaptureService mBoundService;
 	private boolean mIsBound = false;
@@ -49,7 +51,11 @@ public class DataLogger extends ListActivity {
 		LayoutInflater inflater = getLayoutInflater();
 		ViewGroup header = (ViewGroup) inflater.inflate(R.layout.data_logger_header, lv, false);
 		lv.addHeaderView(header, null, false);
-		//lv.addFooterView(header);
+		
+		lastUpdateValueTextView = (TextView) header.findViewById(R.id.last_update_text_view);
+		toggleCloudSyncingButton = (Button) header.findViewById(R.id.toggle_cloud_sync_button);
+		cloudSyncStatusTextView = (TextView) header.findViewById(R.id.cloud_sync_status_text_view);
+		cloudSyncProgressBar = (ProgressBar) header.findViewById(R.id.cloud_sync_progress_bar);
 		
 		ArrayAdapter<SensorDescriptor> adapter = new SensorArrayAdapter(this,
 				appContext.getSelectedSensors(), true);
