@@ -1,0 +1,138 @@
+        
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+        
+        <LinearLayout 
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|top"
+        android:orientation="vertical"
+        android:paddingBottom="10dip"
+        android:paddingLeft="5dip"
+        android:paddingRight="5dip"
+        android:paddingTop="10dip" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fusion Tables Settings"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <LinearLayout
+            android:id="@+id/username_linear_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip" >
+
+            <TextView
+                android:id="@+id/username_text_view"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:text="Username"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/username_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" >
+
+                <requestFocus />
+            </EditText>
+
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/password_linear_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip" >
+
+            <TextView
+                android:id="@+id/password_text_view"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:text="Password"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/password_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="textPassword" />
+
+        </LinearLayout>
+        
+               <LinearLayout
+            android:id="@+id/table_id_linear_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="10dip"
+            android:paddingTop="10dip" >
+
+            <TextView
+                android:id="@+id/table_id_text_view"
+                android:layout_width="80dip"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dip"
+                android:text="Table ID"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/table_id_edit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" 
+              >
+
+                <requestFocus />
+            </EditText>
+
+            <Button
+                android:id="@+id/create_table_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Table"
+                android:paddingLeft="15dip" />
+
+        </LinearLayout>              
+
+ </LinearLayout>
+ 
+                 <LinearLayout
+                   android:id="@+id/linearLayout2"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:gravity="center_horizontal"
+                   android:paddingBottom="15dip"
+                   android:paddingTop="15dip" 
+                   android:layout_alignParentBottom="true">
+
+                   <Button
+                       android:id="@+id/button1"
+                       android:layout_width="150dip"
+                       android:layout_height="wrap_content"
+                       android:paddingLeft="20dip"
+                       android:paddingRight="30dip"
+                       android:text="Save" />
+
+                   <Button
+                       android:id="@+id/button2"
+                       android:layout_width="150dip"
+                       android:layout_height="wrap_content"
+                       android:paddingLeft="30dip"
+                       android:paddingRight="20dip"
+                       android:text="Cancel" />
+
+               </LinearLayout>
+ 
+                    </RelativeLayout>
