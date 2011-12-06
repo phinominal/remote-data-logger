@@ -3,6 +3,9 @@
 package com.phinominal.ftclient;
 
 import java.net.URLEncoder;
+import java.util.StringTokenizer;
+
+import android.util.Log;
 
 /**
  * Helper class for getting auth token.
@@ -35,6 +38,13 @@ public class ClientLogin {
     String[] splitResponse = response.trim().split("=");
     if (splitResponse.length == 4) {
       return splitResponse[3];
+    } else {
+    	StringTokenizer st = new StringTokenizer(response.trim(), "=;"); 
+    	while(st.hasMoreTokens()) { 
+    		String key = st.nextToken(); 
+    		String val = st.nextToken(); 
+    		Log.d("ClientLogin", key + " = " + val);
+    	} 
     }
     return null;
   }

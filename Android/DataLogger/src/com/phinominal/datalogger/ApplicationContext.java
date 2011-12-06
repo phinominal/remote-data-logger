@@ -1,6 +1,5 @@
 package com.phinominal.datalogger;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,10 +9,16 @@ import java.util.ArrayList;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 
 
 public class ApplicationContext extends Application {
+	
+	private static final String PREFS_NAME = "AppContextPrefs";
+	private static final String FT_USERNAME = "ftUsername";
+	private static final String FT_PASSWORD = "ftPassword";
+	private static final String FT_TABLE_ID = "ftTableId";
 	
 	public static enum CloudSyncState {
 	    CloudSyncStateNone, CloudSyncStateAuthenticating, CloudSyncStateLogging, CloudSyncStatePaused,
@@ -27,8 +32,8 @@ public class ApplicationContext extends Application {
 	private static String filename = "sensor_list_object";
 	
 	
-	public String ftUsername = "phinominaltechnology";
-	public String ftPassword = "Sk8ordie!";
+	public String ftUsername = "";//"phinominaltechnology";
+	public String ftPassword = "";//"Sk8ordie!";
 	public long ftTableId = 2154839;
 	
 	@SuppressWarnings("unchecked")
@@ -54,7 +59,6 @@ public class ApplicationContext extends Application {
 			ex.printStackTrace();
 		}
 		
-		// currently creating the sensor array every time...
 		if (sensors == null) {
 			sensors = new ArrayList<SensorDescriptor>();
 			sensors.add(new SensorDescriptor("Sensor 1", 7000, 50000, "", "", 0, true));
@@ -64,10 +68,17 @@ public class ApplicationContext extends Application {
 			sensors.add(new SensorDescriptor("Sensor 5", 0, 4000, "", "", 4, true));
 			sensors.add(new SensorDescriptor("Sensor 6", 0, 4000, "", "", 5, true));
 		}
+		
+		// Get preference values
+		
+	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	    this.ftUsername = settings.getString(ApplicationContext.FT_USERNAME, "");
+	    this.ftPassword = settings.getString(ApplicationContext.FT_PASSWORD, "");
+	    this.ftTableId = settings.getLong(ApplicationContext.FT_TABLE_ID, 0);
 	}
 	
 	
-	public void persistSensorState () {
+	public void persistState () {
 		
 		if (this.sensors != null) {
 			
@@ -85,6 +96,17 @@ public class ApplicationContext extends Application {
 				ex.printStackTrace();
 			}	
 		}
+		
+	      // We need an Editor object to make preference changes.
+	      // All objects are from android.context.Context
+	      SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+	      SharedPreferences.Editor editor = settings.edit();
+	      editor.putString(ApplicationContext.FT_USERNAME, this.ftUsername);
+	      editor.putString(ApplicationContext.FT_PASSWORD, this.ftPassword);
+	      editor.putLong(ApplicationContext.FT_TABLE_ID, this.ftTableId);
+
+	      // Commit the edits!
+	      editor.commit();
 	}
 	
 	public ArrayList <SensorDescriptor> getSelectedSensors() {

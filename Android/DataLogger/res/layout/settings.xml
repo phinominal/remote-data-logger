@@ -102,7 +102,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Create Table"
-                android:paddingLeft="15dip" />
+                android:paddingLeft="15dip"
+                android:enabled="false" />
 
         </LinearLayout>              
 
@@ -118,19 +119,19 @@
                    android:layout_alignParentBottom="true">
 
                    <Button
-                       android:id="@+id/button1"
+                       android:id="@+id/save_button"
                        android:layout_width="150dip"
                        android:layout_height="wrap_content"
-                       android:paddingLeft="20dip"
+                       android:paddingLeft="30dip"
                        android:paddingRight="30dip"
                        android:text="Save" />
 
                    <Button
-                       android:id="@+id/button2"
+                       android:id="@+id/cancel_button"
                        android:layout_width="150dip"
                        android:layout_height="wrap_content"
                        android:paddingLeft="30dip"
-                       android:paddingRight="20dip"
+                       android:paddingRight="30dip"
                        android:text="Cancel" />
 
                </LinearLayout>

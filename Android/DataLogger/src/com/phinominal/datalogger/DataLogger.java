@@ -185,6 +185,7 @@ public class DataLogger extends ListActivity {
 	@Override
 	protected void onDestroy() {
 	    super.onDestroy();
+	    appContext.persistState();
 	    doUnbindService();
 	}
 	
@@ -225,8 +226,14 @@ public class DataLogger extends ListActivity {
 	        			if (mBoundService != null) {
 	        				
 	        				// TODO check if tableId, username and password are set and act accordingly
-	        				
-	        				mBoundService.makeFTConnection(appContext.ftTableId, appContext.ftUsername, appContext.ftPassword);
+	        				if (appContext.ftUsername != null && !appContext.ftUsername.equalsIgnoreCase("") && appContext.ftPassword != null && !appContext.ftPassword.equalsIgnoreCase("")) {
+	        					mBoundService.makeFTConnection(appContext.ftTableId, appContext.ftUsername, appContext.ftPassword);
+	        				} else {
+	        					 android.content.Intent settingsIntent = new android.content.Intent(); 
+	        					 settingsIntent.setClassName("com.phinominal.datalogger", "com.phinominal.datalogger.SettingsActivity");
+	        			         startActivityForResult(new Intent(settingsIntent), 2);
+	        				}
+
 	        			} else {
 	        				shortToast("Error: LogCaptureService not bound...");
 	        			}
@@ -304,19 +311,24 @@ public class DataLogger extends ListActivity {
 				appContext.getSelectedSensors(), true);
 		setListAdapter(adapter);
 	}
-
+	
 	// menu crap: just removes the application
 	public void nuketheapp(){
 		ApplicationContext appContext = ((ApplicationContext)getApplicationContext());
-		appContext.persistSensorState();
+		appContext.persistState();
 		android.os.Process.killProcess(android.os.Process.myPid());
 		this.finish();}
 
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		
-		 android.content.Intent intent = new android.content.Intent(); 
-         intent.setClassName("com.phinominal.datalogger", "com.phinominal.datalogger.SensorList");
-         startActivity(new Intent(intent));
+		 //android.content.Intent intent = new android.content.Intent(); 
+         //intent.setClassName("com.phinominal.datalogger", "com.phinominal.datalogger.SensorList");
+         //startActivity(new Intent(intent));
+		
+		android.content.Intent settingsIntent = new android.content.Intent(); 
+		settingsIntent.setClassName("com.phinominal.datalogger", "com.phinominal.datalogger.SettingsActivity");
+        startActivityForResult(new Intent(settingsIntent), 2);
+        
 		return false;
 	}
 	

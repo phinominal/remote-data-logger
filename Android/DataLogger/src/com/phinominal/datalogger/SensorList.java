@@ -40,7 +40,7 @@ public class SensorList extends ListActivity {
 	// menu crap: just removes the application
 	public void nuketheapp(){
 		ApplicationContext appContext = ((ApplicationContext)getApplicationContext());
-		appContext.persistSensorState();
+		appContext.persistState();
 		android.os.Process.killProcess(android.os.Process.myPid());
 		this.finish();}
 	public boolean onPrepareOptionsMenu(Menu menu) {nuketheapp();return true;}
