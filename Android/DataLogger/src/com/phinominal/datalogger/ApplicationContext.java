@@ -15,12 +15,26 @@ import android.content.Context;
 
 public class ApplicationContext extends Application {
 	
+	public static enum CloudSyncState {
+	    CloudSyncStateNone, CloudSyncStateAuthenticating, CloudSyncStateLogging, CloudSyncStatePaused,
+	    CloudSyncStateError
+	}
+	
+	public CloudSyncState currentCloudSyncState;
+	
 	public ArrayList <SensorDescriptor> sensors = null;
 	
 	private static String filename = "sensor_list_object";
 	
+	
+	public String ftUsername = "phinominaltechnology";
+	public String ftPassword = "Sk8ordie!";
+	public long ftTableId = 2154839;
+	
 	@SuppressWarnings("unchecked")
 	public void onCreate () {
+		
+		currentCloudSyncState = CloudSyncState.CloudSyncStateNone;
 		
 		FileInputStream fis = null;
 		ObjectInputStream in = null;

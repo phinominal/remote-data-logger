@@ -12,4 +12,5 @@
     <string name="SENSOR_5">com.phinominal.datalogger.SENSOR_5</string>
     <string name="SENSOR_6">com.phinominal.datalogger.SENSOR_6</string>
     <string name="CAPTURE_EVENT">com.phinominal.datalogger.custom.intent.action.CAPTURE_EVENT</string>
+    <string name="CLOUD_SYNC_STATE_CHANGE">com.phinominal.datalogger.custom.intent.action.CLOUD_SYNC_STATE_CHANGE</string>
 </resources>

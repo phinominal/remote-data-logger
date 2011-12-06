@@ -26,7 +26,7 @@ public class LogCaptureService extends Service {
 	
 	private int bufferSize = 10;
 	private ArrayList <LogEvent> logBuffer = new ArrayList <LogEvent>();
-	
+	private ApplicationContext appContext;// = ((ApplicationContext)getApplicationContext());;
 	
 	private int updateIntervalMillis = 1000;
 	
@@ -43,6 +43,7 @@ public class LogCaptureService extends Service {
 	public void startCapture(String capturePath) {
 		if (capturePath != null) {
 			this.capturePath = capturePath;
+			appContext = ((ApplicationContext)getApplicationContext());
 		}
 		mHandler.removeCallbacks(mUpdateTimeTask);
         mHandler.post(mUpdateTimeTask);
@@ -76,7 +77,7 @@ public class LogCaptureService extends Service {
 	   					
 	   					logBuffer.add(logEvent);
 	   					
-	   					if (logBuffer.size() >= bufferSize) {
+	   					if (logBuffer.size() >= bufferSize && appContext.currentCloudSyncState == ApplicationContext.CloudSyncState.CloudSyncStateLogging) {
 	   						Log.d("LOG", "Publishing buffer");
 	   						publishBuffer();
 	   					}
@@ -186,15 +187,53 @@ public class LogCaptureService extends Service {
 	
 	public void makeFTConnection(long tableid, String username, String password) {
 		this.tableid = tableid;
-		try {
-			// Initialize FTClient
-			String token = ClientLogin.authorize(username, password);
-			ftclient = new FtClient(token);
+		
 			
-		} catch (Exception e) {
-			Log.d("OUTPUT", "FT ClientLogin Failed  " + Long.toString(System.currentTimeMillis()));
-   		 	Log.d("Exception", e.toString());
-   	 }
+			appContext.currentCloudSyncState = ApplicationContext.CloudSyncState.CloudSyncStateAuthenticating;
+			Intent intent = new Intent(DataLogger.CLOUD_SYNC_STATE_CHANGE_STRING);
+			sendBroadcast(intent);
+			
+			final String uName = username;
+			final String pWord = password;
+			
+			Thread thread = new Thread(new Runnable() {
+				public void run () {
+					try {
+						// Initialize FTClient
+						String token = ClientLogin.authorize(uName, pWord);
+					
+						if (token != null) {
+							// Authenticating was successful, now create client and broadcast new state
+							ftclient = new FtClient(token);
+							appContext.currentCloudSyncState = ApplicationContext.CloudSyncState.CloudSyncStateLogging;
+							Intent newIntent = new Intent(DataLogger.CLOUD_SYNC_STATE_CHANGE_STRING);
+							sendBroadcast(newIntent);
+							
+						} else {
+							sendCloudSyncErrorBroadcast();
+						}
+					} catch (Exception e) {
+						Log.d("OUTPUT", "FT ClientLogin Failed  " + Long.toString(System.currentTimeMillis()));
+			   		 	Log.d("Exception", e.toString());
+			   		 	sendCloudSyncErrorBroadcast();		   		 
+			   	 	}
+				}
+			});
+			
+			thread.start();
+			
+			Handler handler = new Handler();
+			handler.post(new Runnable() {
+				public void run () {
+					
+				}
+			});
+	}
+	
+	private void sendCloudSyncErrorBroadcast() {
+		appContext.currentCloudSyncState = ApplicationContext.CloudSyncState.CloudSyncStateError;
+		Intent intent = new Intent(DataLogger.CLOUD_SYNC_STATE_CHANGE_STRING);
+		sendBroadcast(intent);
 	}
 	
 
