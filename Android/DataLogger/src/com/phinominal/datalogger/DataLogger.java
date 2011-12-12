@@ -118,13 +118,6 @@ public class DataLogger extends ListActivity {
 				 int sensorValue = logEvent.getSensorValueAtIndex(i);
 				 
 				 descriptor.setCurrMV(sensorValue);
-				 
-				 if (sensorValue == -1) {
-					 descriptor.setSelected(false);
-				 } else {
-					 descriptor.setSelected(true);
-				 }
-				 
 			 }
 			 refreshList();    	  	
         }

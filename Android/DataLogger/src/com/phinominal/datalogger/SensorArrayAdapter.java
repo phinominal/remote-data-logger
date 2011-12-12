@@ -1,6 +1,5 @@
 package com.phinominal.datalogger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -112,14 +111,14 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 		View view = null;
 		if (convertView == null) {
 			LayoutInflater inflator = context.getLayoutInflater();
-			view = inflator.inflate(R.layout.full_sensor_descriptor_row, null);
+			view = inflator.inflate(R.layout.sensor_row, null);
 			
 			final FullViewHolder viewHolder = new FullViewHolder();
 			viewHolder.sensorNameTextView = (TextView)view.findViewById(R.id.sensor_name_textview);
-			viewHolder.mvProgressBar = (ProgressBar)view.findViewById(R.id.mv_progress_bar);
+			//viewHolder.mvProgressBar = (ProgressBar)view.findViewById(R.id.mv_progress_bar);
 			viewHolder.mvTextView = (TextView) view.findViewById(R.id.mv_textview);
-			viewHolder.playPauseButton = (Button)view.findViewById(R.id.play_pause_button);
-			viewHolder.moreInfoButton = (Button)view.findViewById(R.id.more_info_button);
+			//viewHolder.playPauseButton = (Button)view.findViewById(R.id.play_pause_button);
+			//viewHolder.moreInfoButton = (Button)view.findViewById(R.id.more_info_button);
 			
 		
 			view.setTag(viewHolder);
@@ -134,8 +133,9 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 		FullViewHolder holder = (FullViewHolder) view.getTag();
 		
 		
-		SensorDescriptor sensor = list.get(position); // use AppContext instead of list as backing store here and get
+		SensorDescriptor sensor = list.get(position); 
 		
+		/*
 		holder.mvProgressBar.setMax(sensor.getRangeMax());
 		if (sensor.getTag() == 0) {
 			holder.mvProgressBar.setMax(14000);
@@ -144,6 +144,7 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 			holder.mvProgressBar.setMax(sensor.getRangeMax());
 			holder.mvProgressBar.setProgress((int)sensor.getCurrMV());
 		}
+		*/
 		holder.sensorNameTextView.setText(sensor.getName());
 		//float mv = sensor.getCurrMV() / 5000;
 		

@@ -114,9 +114,9 @@ public class ApplicationContext extends Application {
 		
 		for (int i = 0; i < sensors.size(); i++) {
 			SensorDescriptor tempDescriptor = sensors.get(i);
-			if (tempDescriptor.isSelected()) {
+			//if (tempDescriptor.isSelected()) {
 				selectedSensors.add(tempDescriptor);
-			}
+			//}
 		}
 		
 		return selectedSensors;
