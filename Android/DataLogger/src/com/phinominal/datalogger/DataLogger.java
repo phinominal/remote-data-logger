@@ -70,13 +70,14 @@ public class DataLogger extends ListActivity {
 				appContext.getSelectedSensors(), true);
 		setListAdapter(adapter);
 		
-
+		/*
 		// Add EditText footer for debugging purposes
 		editText = new EditText(this);
 		editText.setHeight(80);
 		editText.setWidth(200);
 		getListView().addFooterView(editText);
-
+		*/
+		
 		// Register to receive CAPTURE_EVENT broadcast events
 		IntentFilter captureFilter;
         captureFilter = new IntentFilter(this.getString(R.string.CAPTURE_EVENT));
@@ -108,46 +109,24 @@ public class DataLogger extends ListActivity {
     	  		lastUpdateValueTextView.setText(logEvent.dateString);	
     	  	}
     	  	
-    	  	//((SensorArrayAdapter) getListAdapter())
-    	  	
     	  	ArrayList <SensorDescriptor> list = getList();
 			 
 			 for (int i = 0; i < list.size(); i++) {
 				 
-				 
 				 SensorDescriptor descriptor = list.get(i);
-				 Float currFloat = Float.parseFloat(components[i]);
 				 
-				 descriptor.setCurrMV(currFloat.floatValue());
+				 int sensorValue = logEvent.getSensorValueAtIndex(i);
+				 
+				 descriptor.setCurrMV(sensorValue);
+				 
+				 if (sensorValue == -1) {
+					 descriptor.setSelected(false);
+				 } else {
+					 descriptor.setSelected(true);
+				 }
 				 
 			 }
-			 
-    	  	
-    	  	// Here is the former code that updated the UI.  Will have to modify slightly to use data from intent...
-    	  	
-    	  	 /*
-    	  	  * 
-    	  	  
-    	  	 editText.setText(line + "   " +  Long.toString(System.currentTimeMillis()));
-    	  	  
-			 ArrayList <SensorDescriptor> list = getList();
-			 
-			 for (int i = 0; i < list.size(); i++) {
-				 
-				 
-				 SensorDescriptor descriptor = list.get(i);
-				 Float currFloat = Float.parseFloat(components[i]);
-				 
-				 descriptor.setCurrMV(currFloat.floatValue());
-				 
-			 }
-			 
-			 
-			 refreshList();
-			 */
-    	  	
-    	  	
-    	  	
+			 refreshList();    	  	
         }
     }
 	

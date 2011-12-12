@@ -150,7 +150,15 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 		holder.mvTextView.setText(Float.toString(sensor.getCurrMV()));
 		//holder.mvProgressBar.setProgress((int)sensor.getMappedMV());
 		
-		
+		if (sensor.getCurrMV() == -1) {
+			view.setEnabled(false);
+			holder.mvTextView.setEnabled(false);
+			holder.sensorNameTextView.setEnabled(false);
+		} else {
+			view.setEnabled(true);
+			holder.mvTextView.setEnabled(true);
+			holder.sensorNameTextView.setEnabled(true);
+		}
 		
 		
 		return view;
@@ -160,4 +168,5 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 	public List<SensorDescriptor> getList() {
 		return list;
 	}
+
 }

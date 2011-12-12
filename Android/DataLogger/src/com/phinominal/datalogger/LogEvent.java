@@ -44,5 +44,30 @@ public class LogEvent {
 		intent.putExtra(context.getString(R.string.DATE_STRING), dateString);
 	}
 	
+	public int getSensorValueAtIndex(int index) {
+		int value = -1;
+		switch (index) {
+			case 0:
+				value = this.sensor1;
+				break;
+			case 1:
+				value = this.sensor2;
+				break;
+			case 2:
+				value = this.sensor3;
+				break;
+			case 3:
+				value = this.sensor4;
+				break;
+			case 4:
+				value = this.sensor5;
+				break;
+			case 5:
+				value = this.sensor6;
+				break;
+		}
+		return value;
+	}
+	
 }
 
