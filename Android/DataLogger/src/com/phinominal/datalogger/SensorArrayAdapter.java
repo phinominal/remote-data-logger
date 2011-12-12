@@ -132,7 +132,9 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 		// TODO:  THIS LOGIC IS WACK RIGHT NOW!!!  All of the mapping logic should be done inside the SensorDescriptor class!!! 
 		
 		FullViewHolder holder = (FullViewHolder) view.getTag();
-		SensorDescriptor sensor = list.get(position);
+		
+		
+		SensorDescriptor sensor = list.get(position); // use AppContext instead of list as backing store here and get
 		
 		holder.mvProgressBar.setMax(sensor.getRangeMax());
 		if (sensor.getTag() == 0) {
@@ -154,6 +156,7 @@ public class SensorArrayAdapter extends ArrayAdapter <SensorDescriptor> {
 		return view;
 	}
 
+	
 	public List<SensorDescriptor> getList() {
 		return list;
 	}

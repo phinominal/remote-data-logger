@@ -102,6 +102,26 @@ public class DataLogger extends ListActivity {
         {
     	  	Log.d("OUTPUT", "BROADCAST RECEIVED  Sensors: " + intent.getIntExtra(getString(R.string.SENSOR_1), -1) + ", " + intent.getIntExtra(getString(R.string.SENSOR_2), -1) + ", " + intent.getIntExtra(getString(R.string.SENSOR_3), -1) + "   TimeStamp:  " + intent.getIntExtra(getString(R.string.TIMESTAMP), -1) + "   DateString:  " + intent.getStringExtra(getString(R.string.DATE_STRING)));
     	  	
+    	  	LogEvent logEvent = new LogEvent(intent, context);
+    	  	
+    	  	if (logEvent.dateString != null) {
+    	  		lastUpdateValueTextView.setText(logEvent.dateString);	
+    	  	}
+    	  	
+    	  	//((SensorArrayAdapter) getListAdapter())
+    	  	
+    	  	ArrayList <SensorDescriptor> list = getList();
+			 
+			 for (int i = 0; i < list.size(); i++) {
+				 
+				 
+				 SensorDescriptor descriptor = list.get(i);
+				 Float currFloat = Float.parseFloat(components[i]);
+				 
+				 descriptor.setCurrMV(currFloat.floatValue());
+				 
+			 }
+			 
     	  	
     	  	// Here is the former code that updated the UI.  Will have to modify slightly to use data from intent...
     	  	

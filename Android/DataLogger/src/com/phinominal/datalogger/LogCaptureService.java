@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import android.app.Service;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -70,8 +69,9 @@ public class LogCaptureService extends Service {
 	   				 if (logEvent != null) {
 	   					 
 	   					 
-	   					Intent intent = new Intent(Resources.getSystem().getString(R.string.CAPTURE_EVENT));
-	   					logEvent.addValuesToIntent(intent);
+	   					//Intent intent = new Intent("com.phinominal.datalogger.custom.intent.action.CAPTURE_EVENT");
+	   					Intent intent = new Intent(getString(R.string.CAPTURE_EVENT));
+	   					logEvent.addValuesToIntent(intent, this);
 	   					
 	   					sendBroadcast(intent);
 	   					
